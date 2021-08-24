@@ -32,9 +32,9 @@ export default function App() {
 						})
 						.sort((a, b) => a.last_name.localeCompare(b.last_name))
 						.map((contact) => (
-							<ul key={contact.id}>
+							<ListContainerStyles key={contact.id}>
 								<ListItem contact={contact} />
-							</ul>
+							</ListContainerStyles>
 						))}
 				</div>
 			)}
@@ -45,4 +45,11 @@ export default function App() {
 const InputStyles = styled.input`
 	display: block;
 	width: 100%;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+`
+const ListContainerStyles = styled.ul`
+	padding: 0;
+	margin: 0;
 `

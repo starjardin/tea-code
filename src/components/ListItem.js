@@ -4,14 +4,20 @@ import { GlobalContext } from '../context/GlobalContext'
 
 export default function ListItem({ contact }) {
 	const { dispatch } = useContext(GlobalContext)
-	const handleChange = (id) => {
+	const handleClickCheckbox = (id) => {
+		dispatch({
+			type: 'CHECK_CONTACT',
+			payload: id,
+		})
+	}
+	const handleChangeCheckbox = (id) => {
 		dispatch({
 			type: 'CHECK_CONTACT',
 			payload: id,
 		})
 	}
 	return (
-		<ListStyles>
+		<ListStyles onClick={() => handleClickCheckbox(contact.id)}>
 			<ContactInfoStyles>
 				<AvatarContainer>
 					{contact.avatar ? (
@@ -24,15 +30,15 @@ export default function ListItem({ contact }) {
 					)}
 				</AvatarContainer>
 				<div>
-					<span>{contact.first_name}</span>
-					<span>{contact.last_name}</span>
+					<ContactNameStyles>{contact.first_name}</ContactNameStyles>
+					<ContactNameStyles>{contact.last_name}</ContactNameStyles>
 					<Paragraph>{contact.email}</Paragraph>
 				</div>
 			</ContactInfoStyles>
 			<input
 				type='checkbox'
 				checked={contact.isChecked}
-				onChange={() => handleChange(contact.id)}
+				onChange={() => handleChangeCheckbox(contact.id)}
 			/>
 		</ListStyles>
 	)
@@ -42,18 +48,26 @@ const ListStyles = styled.li`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	border-bottom: solid 1px #ccc;
 `
 
 const ContactInfoStyles = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 5%;
 `
 
 const AvatarContainer = styled.div`
 	border-radius: 50%;
 	border: solid 1px #cccccc;
+	width: 50px;
+	height: 50px;
 `
 const Paragraph = styled.p`
 	margin: 0;
+`
+const ContactNameStyles = styled.span`
+	text-transform: capitalize;
+	margin: 0 0.3rem;
 `
