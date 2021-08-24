@@ -37,6 +37,13 @@ const reducer = (state, action) => {
 				}),
 			}
 		}
+		case 'CONSOLE_LOG': {
+			const checkedElement = state.contacts.filter(
+				(contact) => contact.isChecked
+			)
+			checkedElement.length && console.log(checkedElement)
+			return state
+		}
 
 		default:
 			return state

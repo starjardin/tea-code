@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { GlobalContext } from '../context/GlobalContext'
 
@@ -16,17 +17,24 @@ export default function ListItem({ contact }) {
 			payload: id,
 		})
 	}
+
+	useEffect(() => {
+		dispatch({
+			type: 'CONSOLE_LOG',
+		})
+	}, [contact.isChecked])
+
 	return (
 		<ListStyles onClick={() => handleClickCheckbox(contact.id)}>
 			<ContactInfoStyles>
 				<AvatarContainer>
 					{contact.avatar ? (
-						<img src={contact.avatar} alt={contact.first_name} />
+						<ImageStyles src={contact.avatar} alt={contact.first_name} />
 					) : (
-						<div>
+						<NameAvatarStyles>
 							<span>{contact.first_name.charAt(0)}</span>
 							<span>{contact.last_name.charAt(0)}</span>
-						</div>
+						</NameAvatarStyles>
 					)}
 				</AvatarContainer>
 				<div>
@@ -49,6 +57,7 @@ const ListStyles = styled.li`
 	justify-content: space-between;
 	align-items: center;
 	border-bottom: solid 1px #ccc;
+	padding: 10px 0;
 `
 
 const ContactInfoStyles = styled.div`
@@ -63,11 +72,31 @@ const AvatarContainer = styled.div`
 	border: solid 1px #cccccc;
 	width: 50px;
 	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff;
+	color: #dcdcdc;
 `
 const Paragraph = styled.p`
 	margin: 0;
+	color: #b2b2b2;
+	font-size: large.8rem;
 `
 const ContactNameStyles = styled.span`
 	text-transform: capitalize;
-	margin: 0 0.3rem;
+	margin: 0 0.3rem 0 0;
+	color: #303030;
+	font-weight: 800;
+	font-size: 1.5rem;
+`
+const ImageStyles = styled.img`
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+`
+const NameAvatarStyles = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
