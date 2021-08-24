@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext, useState } from 'react'
+import Header from './components/Header'
+import ListItem from './components/ListItem'
+import { GlobalContext } from './context/GlobalContext'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [searchValue, setSearchValue] = useState('')
+	const {
+		state: { contacts, isLoading },
+	} = useContext(GlobalContext)
+
+	const contactsWithCheckedProp = contacts.map((contact) => {
+		return {
+			...contact,
+			isChecked: false,
+		}
+	})
+
+	const handleChange = (e) => {
+		setSearchValue(e.target.value)
+	}
+
+	return (
+		<div>
+			<Header />
+			<input type='text' onChange={(e) => handleChange(e)} />
+			{isLoading
+				? 'LisLoading....'
+				: contactsWithCheckedProp
+						.filter((contact) => {
+							const name = (contact.first_name + contact.last_name)
+								.toLowerCase()
+								.trim()
+							return name.includes(searchValue.toLowerCase().trim())
+						})
+						.sort((a, b) => a.last_name.localeCompare(b.last_name))
+						.map((contact) => (
+							<ul key={contact.id}>
+								<ListItem
+									contact={contact}
+									contactsWithCheckedProp={contactsWithCheckedProp}
+								/>
+							</ul>
+						))}
+		</div>
+	)
 }
 
-export default App;
+export default App
