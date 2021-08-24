@@ -1,19 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { GlobalContext } from '../context/GlobalContext'
 
-export default function ListItem({ contact, contactsWithCheckedProp }) {
+export default function ListItem({ contact }) {
+	const { dispatch } = useContext(GlobalContext)
 	const handleChange = (id) => {
-		const element = contactsWithCheckedProp.find((el) => el.id === id)
-		console.log(element)
-		return {
-			...element,
-			isChecked: true,
-		}
+		dispatch({
+			type: 'CHECK_CONTACT',
+			payload: id,
+		})
 	}
 	return (
 		<ListStyles>
 			<ContactInfoStyles>
-				<div>
+				<AvatarContainer>
 					{contact.avatar ? (
 						<img src={contact.avatar} alt={contact.first_name} />
 					) : (
@@ -22,11 +22,11 @@ export default function ListItem({ contact, contactsWithCheckedProp }) {
 							<span>{contact.last_name.charAt(0)}</span>
 						</div>
 					)}
-				</div>
+				</AvatarContainer>
 				<div>
 					<span>{contact.first_name}</span>
 					<span>{contact.last_name}</span>
-					<p>{contact.email}</p>
+					<Paragraph>{contact.email}</Paragraph>
 				</div>
 			</ContactInfoStyles>
 			<input
@@ -48,4 +48,12 @@ const ContactInfoStyles = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+`
+
+const AvatarContainer = styled.div`
+	border-radius: 50%;
+	border: solid 1px #cccccc;
+`
+const Paragraph = styled.p`
+	margin: 0;
 `

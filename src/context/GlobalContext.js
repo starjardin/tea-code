@@ -1,5 +1,7 @@
 import { useEffect, useReducer, createContext } from 'react'
 
+import { endpoint } from '../constant/index'
+
 const initialState = {
 	contacts: [],
 	isLoading: true,
@@ -12,7 +14,27 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				isLoading: false,
-				contacts: action.payload,
+				contacts: action.payload.map((el) => {
+					return {
+						...el,
+						isChecked: false,
+					}
+				}),
+			}
+		}
+
+		case 'CHECK_CONTACT': {
+			return {
+				...state,
+				contacts: state.contacts.map((el) => {
+					if (el.id === action.payload) {
+						return {
+							...el,
+							isChecked: !el.isChecked,
+						}
+					}
+					return el
+				}),
 			}
 		}
 
@@ -25,9 +47,7 @@ export const ContextProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const fetchData = async () => {
-		const response = await fetch(
-			'https://teacode-recruitment-challenge.s3.eu-central-1.amazonaws.com/users.json'
-		)
+		const response = await fetch(endpoint)
 
 		const data = await response.json()
 

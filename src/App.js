@@ -1,20 +1,15 @@
 import { useContext, useState } from 'react'
+import styled from 'styled-components'
+
 import Header from './components/Header'
 import ListItem from './components/ListItem'
 import { GlobalContext } from './context/GlobalContext'
 
-function App() {
+export default function App() {
 	const [searchValue, setSearchValue] = useState('')
 	const {
 		state: { contacts, isLoading },
 	} = useContext(GlobalContext)
-
-	const contactsWithCheckedProp = contacts.map((contact) => {
-		return {
-			...contact,
-			isChecked: false,
-		}
-	})
 
 	const handleChange = (e) => {
 		setSearchValue(e.target.value)
@@ -23,10 +18,12 @@ function App() {
 	return (
 		<div>
 			<Header />
-			<input type='text' onChange={(e) => handleChange(e)} />
-			{isLoading
-				? 'LisLoading....'
-				: contactsWithCheckedProp
+			{isLoading ? (
+				'LisLoading....'
+			) : (
+				<div>
+					<InputStyles type='text' onChange={(e) => handleChange(e)} />
+					{contacts
 						.filter((contact) => {
 							const name = (contact.first_name + contact.last_name)
 								.toLowerCase()
@@ -36,14 +33,16 @@ function App() {
 						.sort((a, b) => a.last_name.localeCompare(b.last_name))
 						.map((contact) => (
 							<ul key={contact.id}>
-								<ListItem
-									contact={contact}
-									contactsWithCheckedProp={contactsWithCheckedProp}
-								/>
+								<ListItem contact={contact} />
 							</ul>
 						))}
+				</div>
+			)}
 		</div>
 	)
 }
 
-export default App
+const InputStyles = styled.input`
+	display: block;
+	width: 100%;
+`
