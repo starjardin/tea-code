@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { GlobalContext } from '../context/GlobalContext'
 
@@ -11,43 +11,27 @@ export default function ListItem({ contact }) {
 			payload: id,
 		})
 	}
-	const handleChangeCheckbox = (id) => {
-		dispatch({
-			type: 'CHECK_CONTACT',
-			payload: id,
-		})
-	}
-
-	useEffect(() => {
-		dispatch({
-			type: 'CONSOLE_LOG',
-		})
-	}, [contact.isChecked])
 
 	return (
-		<ListStyles onClick={() => handleClickCheckbox(contact.id)}>
+		<ListStyles onClick={() => handleClickCheckbox(contact?.id)}>
 			<ContactInfoStyles>
 				<AvatarContainer>
-					{contact.avatar ? (
-						<ImageStyles src={contact.avatar} alt={contact.first_name} />
+					{contact?.avatar ? (
+						<ImageStyles src={contact?.avatar} alt={contact?.first_name} />
 					) : (
 						<NameAvatarStyles>
-							<span>{contact.first_name.charAt(0)}</span>
-							<span>{contact.last_name.charAt(0)}</span>
+							<span>{contact?.first_name?.charAt(0)}</span>
+							<span>{contact?.last_name?.charAt(0)}</span>
 						</NameAvatarStyles>
 					)}
 				</AvatarContainer>
 				<div>
-					<ContactNameStyles>{contact.first_name}</ContactNameStyles>
-					<ContactNameStyles>{contact.last_name}</ContactNameStyles>
-					<Paragraph>{contact.email}</Paragraph>
+					<ContactNameStyles>{contact?.first_name}</ContactNameStyles>
+					<ContactNameStyles>{contact?.last_name}</ContactNameStyles>
+					<Paragraph>{contact?.email}</Paragraph>
 				</div>
 			</ContactInfoStyles>
-			<input
-				type='checkbox'
-				checked={contact.isChecked}
-				onChange={() => handleChangeCheckbox(contact.id)}
-			/>
+			<input type='checkbox' checked={contact?.isChecked} onChange={() => {}} />
 		</ListStyles>
 	)
 }
@@ -57,7 +41,7 @@ const ListStyles = styled.li`
 	justify-content: space-between;
 	align-items: center;
 	border-bottom: solid 1px #ccc;
-	padding: 10px 0;
+	padding: 5px 0;
 `
 
 const ContactInfoStyles = styled.div`
@@ -71,12 +55,13 @@ const AvatarContainer = styled.div`
 	border-radius: 50%;
 	border: solid 1px #cccccc;
 	width: 50px;
-	height: 50px;
+	height: 40px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: #ffffff;
 	color: #dcdcdc;
+	padding: 0.2rem;
 `
 const Paragraph = styled.p`
 	margin: 0;
@@ -93,10 +78,7 @@ const ContactNameStyles = styled.span`
 const ImageStyles = styled.img`
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
 `
 const NameAvatarStyles = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	background-color: #ffffff;
 `

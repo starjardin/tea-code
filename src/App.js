@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import Header from './components/Header'
@@ -16,12 +16,25 @@ export default function App() {
 		setSearchValue(e.target.value)
 	}
 
+	useEffect(() => {
+		console.log(contacts.filter((el) => el.isChecked))
+	}, [contacts])
+
+	const filteredItem = searchValue
+		? contacts.filter((contact) => {
+				const name = (contact.first_name + contact.last_name)
+					.toLowerCase()
+					.trim()
+				return name.includes(searchValue.toLowerCase().trim())
+		  })
+		: contacts
+
 	return (
 		<div>
 			<Header />
 			{isLoading ? (
 				<LoadingStyles>Loading....</LoadingStyles>
-			) : (
+			) : contacts.length ? (
 				<div>
 					<SearchContainer>
 						<Icon>
@@ -29,13 +42,7 @@ export default function App() {
 						</Icon>
 						<InputStyles type='text' onChange={(e) => handleChange(e)} />
 					</SearchContainer>
-					{contacts
-						.filter((contact) => {
-							const name = (contact.first_name + contact.last_name)
-								.toLowerCase()
-								.trim()
-							return name.includes(searchValue.toLowerCase().trim())
-						})
+					{filteredItem
 						.sort((a, b) => a.last_name.localeCompare(b.last_name))
 						.map((contact) => (
 							<ListContainerStyles key={contact.id}>
@@ -43,6 +50,8 @@ export default function App() {
 							</ListContainerStyles>
 						))}
 				</div>
+			) : (
+				<LoadingStyles>No items found</LoadingStyles>
 			)}
 		</div>
 	)
@@ -72,6 +81,12 @@ const SearchContainer = styled.div`
 const Icon = styled.div`
 	position: absolute;
 	top: 50%;
+	left: 0.5rem;
 	transform: translateY(-50%);
 `
-const LoadingStyles = styled.h2(Icon)
+const LoadingStyles = styled.h2`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+`

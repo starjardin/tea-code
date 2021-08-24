@@ -37,13 +37,6 @@ const reducer = (state, action) => {
 				}),
 			}
 		}
-		case 'CONSOLE_LOG': {
-			const checkedElement = state.contacts.filter(
-				(contact) => contact.isChecked
-			)
-			checkedElement.length && console.log(checkedElement)
-			return state
-		}
 
 		default:
 			return state
@@ -55,9 +48,7 @@ export const ContextProvider = ({ children }) => {
 
 	const fetchData = async () => {
 		const response = await fetch(endpoint)
-
 		const data = await response.json()
-
 		dispatch({
 			type: 'FETCH_DATA',
 			payload: data,
